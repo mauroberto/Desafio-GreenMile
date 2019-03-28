@@ -37,6 +37,33 @@ test('Particionar Vetor', (t) => {
     t.end()  
 })
 
+test('Particionar Vetor Vazio', (t) => {
+    var p = index.partition([], 3, 0, 6);    
+    t.assert(p == -1, "Particionou Corretamente")
+    t.end()  
+})
+
+test('Particionar Vetor undefined', (t) => {
+    var p = index.partition(undefined, 3, 0, 6);    
+    t.assert(p == -1, "Particionou Corretamente")
+    t.end()  
+})
+
+test('Particionar Vetor com end > begin', (t) => {
+    var distances = [
+        {_id: 1, value: 10, client: {}}, 
+        {_id: 2, value: 3, client: {}}, 
+        {_id: 3, value: 20, client: {}},
+        {_id: 4, value: 15, client: {}},
+        {_id: 5, value: 2, client: {}},
+        {_id: 6, value: 150, client: {}},
+        {_id: 7, value: 1, client: {}}
+    ];
+    var p = index.partition(distances, 3, 6, 3);    
+    t.assert(p == -1, "Particionou Corretamente")
+    t.end()  
+})
+
 test('Particionar Subvetor', (t) => {
     var distances = [
         {_id: 1, value: 10, client: {}}, 
@@ -69,15 +96,6 @@ test('Particionar Subvetor 2', (t) => {
     t.end()  
 })
 
-
-
-test('Particionar vetor vazio', (t) => {
-    var distances = [];
-
-    var p = index.partition(distances, 0, 0, 0);    
-    t.assert(validatePartition(distances, p, 0, 0) == true, "Particionou Corretamente")
-    t.end()  
-})
 
 // kNearests Tests
 var listContains = function(element, list){
@@ -119,6 +137,37 @@ test('k mais próximos', (t) => {
     ];
 
     t.assert(validatekNearests(returned, expected) == true, "Selecionou Corretamente")
+    t.end()  
+})
+
+test('k mais próximos com vetor distances vazio', (t) => {
+    var returned = index.kNearests([], 3);   
+
+    t.assert(returned != undefined && returned.length == 0, "Selecionou Corretamente")
+    t.end()  
+})
+
+test('k mais próximos com vetor distances undefined', (t) => {
+    var returned = index.kNearests(undefined, 3);    
+
+    t.assert(returned != undefined && returned.length == 0, "Selecionou Corretamente")
+    t.end()  
+})
+
+test('k mais próximos com k == 0', (t) => {
+    var distances = [
+        {_id: 1, value: 10, client: {}}, 
+        {_id: 2, value: 3, client: {}}, 
+        {_id: 3, value: 20, client: {}},
+        {_id: 4, value: 15, client: {}},
+        {_id: 5, value: 2, client: {}},
+        {_id: 6, value: 150, client: {}},
+        {_id: 7, value: 1, client: {}}
+    ];
+
+    var returned = index.kNearests(distances, 0); 
+
+    t.assert(returned != undefined && returned.length == 0, "Selecionou Corretamente")
     t.end()  
 })
 
@@ -207,9 +256,32 @@ test('k mais próximos com k == 0', (t) => {
         {_id: 7, value: 1, client: {}}
     ];
 
-    var returned = index.kNearests(distances, 0);    
-    var expected = [];
+    var returned = index.kNearests(distances, 0);
 
-    t.assert(validatekNearests(returned, expected) == true, "Selecionou Corretamente")
+    t.assert(returned != undefined && returned.length == 0, "Selecionou Corretamente")
+    t.end()  
+})
+
+
+// calculateDistances Tests
+
+test('Calcular distâncias com vetor de clientes vazio', (t) => {
+    var returned = index.calculateDistances({}, []);    
+
+    t.assert(returned != undefined && returned.length == 0, "Calculou Corretamente")
+    t.end()  
+})
+
+test('Calcular distâncias com vetor de clientes undefined', (t) => {
+    var returned = index.calculateDistances({}, undefined);    
+
+    t.assert(returned != undefined && returned.length == 0, "Calculou Corretamente")
+    t.end()  
+})
+
+test('Calcular distâncias com cliente undefined', (t) => {
+    var returned = index.calculateDistances(undefined, []);    
+
+    t.assert(returned != undefined && returned.length == 0, "Calculou Corretamente")
     t.end()  
 })

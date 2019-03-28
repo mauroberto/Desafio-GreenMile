@@ -1,4 +1,5 @@
 let Client = require('../models/client');
+let Attribute = require('../models/attribute');
 
 // Calcula a distância em KM entre duas coordenadas
 // Fonte: https://stackoverflow.com/a/27943
@@ -21,8 +22,10 @@ module.exports.getDistanceFromLatLonInKm = function(lat1,lon1,lat2,lon2) {
 module.exports.calculateDistances = function(client, listOfClients){
     var distances = [];
 
+    if(client == undefined || listOfClients == undefined) return [];
+
     for (var i = 0; i < listOfClients.length; i++){
-        if(listOfClients[i]._id == client._id){     //Eliminando o cliente passado como parâmetro
+        if(listOfClients[i]._id.equals(client._id)){     //Eliminando o cliente passado como parâmetro
             continue;
         }
 
@@ -40,14 +43,17 @@ module.exports.calculateDistances = function(client, listOfClients){
 
 // Recebe uma lista de distâncias, um inteiro p, o início da lista (begin) e o fim da lista (end)
 // Modifica a lista de forma semelhante ao particionamento do quicksort, os valores melhores ou iguais ao da posição p são colocados a esquerda e os maiores a direita
-// A compleixade de tempo é O(N), em que N é o tamanho da lista de distâncias
+// A compleixade de tempo é O(N), em que N é o número de elementos no intervalo [begin, end]
 // Modifica a lista e devolve a posição de p na nova lista
 module.exports.partition = function(distances, p, begin, end){
+
+    if (begin >= end || distances == undefined || distances.length == 0) {
+        return -1;
+    }
+
     [distances[p], distances[end]] = [distances[end], distances[p]]; //swap end e p
 
     p = end;
-
-    if (begin == end) return;
 
     var start = begin - 1;
 
@@ -67,11 +73,15 @@ module.exports.partition = function(distances, p, begin, end){
 
 // Recebe uma lista de distâncias, um inteiro k, um inteiro begin (que indica em que índice começa a lista) e um inteiro end (que indica onde termina a lista)
 // Devolve as k menores distâncias da lista
-// A complexidade esperada é de O(N), em que N é o tamanho da lista de distâncias
+// A complexidade esperada é de O(N), em que N é o número de elementos no intervalo [begin, end]
 // No pior caso, a complexidade é O(N^2), mas o pior caso é muito difícil de acontecer
 // A complexidade de memória é O(N)
 module.exports.kNearestsRecursive = function(distances, k, begin, end){
     var n = (end - begin) + 1;
+
+    if(distances == undefined || k == 0 || n == 0){
+        return;
+    }
 
     if (n <= k || k == 0){
         return;
@@ -96,6 +106,9 @@ module.exports.kNearestsRecursive = function(distances, k, begin, end){
 // Devolve as k menores distâncias da lista
 // Utiliza a função kNearestsRecursive para modificar a lista e devolve apenas os primeiros k elementos da lista modificada
 module.exports.kNearests = function(distances, k){
+    if(distances == undefined || k == 0 || distances.length == 0){
+        return [];
+    }
     this.kNearestsRecursive(distances, k, 0, distances.length - 1);
     return distances.slice(0, k);
 }
@@ -103,9 +116,7 @@ module.exports.kNearests = function(distances, k){
 
 module.exports.findNearest = function(req, res){
     let idClient = req.params.code;
-    console.log(idClient);
     let k = req.params.nResults;
-    console.log(k);
     let promise = Client.findOne({"_id": idClient});
     
     promise.then(
@@ -114,6 +125,7 @@ module.exports.findNearest = function(req, res){
             promise2.then(
                 function(clients){
                     var distances = module.exports.calculateDistances(client, clients);
+
                     var nearests = module.exports.kNearests(distances, k);
 
                     var nearestClients = [].map.call(nearests, function(obj) {
@@ -137,31 +149,40 @@ module.exports.findNearest = function(req, res){
 }
 
 module.exports.findNearestWithAttribute = function(req, res){
-    let id = req.params.id;
-    let promise = User.findById(id);
+    let idClient = req.params.code;
+    let k = req.params.nResults;
+    let attr = req.params.attr;
+    let promise = Client.findOne({"_id": idClient});
     promise.then(
-        function(user){
-            res.json(user);
+        function(client){
+            let promise2 = Attribute.find({"name": attr}).populate('clients');
+            promise2.then(
+                function(attribute){
+                    console.log(attribute);
+                    var clients = attribute.clients;
+
+                    console.log(attribute.clients);
+                    
+                    var distances = module.exports.calculateDistances(client, clients);
+
+                    var nearests = module.exports.kNearests(distances, k);
+
+                    var nearestClients = [].map.call(nearests, function(obj) {
+                        return obj.client;
+                    });
+
+                    res.json(nearestClients);
+                }
+            ).catch(
+                function(error){
+                    console.log(error);
+                    res.status(500).end();
+                }
+            )
         }
     ).catch(
         function(error){
             res.status(404).send("Não existe");
-        }
-    )
-}
-
-module.exports.insertClient = function(client){
-    let promise = Client.create(client);
-    promise.then(
-        function(client){
-            console.log("deu certo!");
-            return true;
-        }
-    ).catch(
-        function(error){
-            console.log(error);
-            console.log("deu ruim!");
-            return false;
         }
     )
 }

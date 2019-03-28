@@ -5,10 +5,7 @@ module.exports = function(){
             type: String,
             required: true
         },
-        description: {
-            type: [String],
-            required: false
-        },
+        description:[String],
         latitude: {
             type: Number,
             required: true
