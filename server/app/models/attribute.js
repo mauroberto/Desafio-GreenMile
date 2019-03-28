@@ -10,5 +10,6 @@ module.exports = function(){
             ref: 'Client'
         }]
     });
+    schema.index({name: 1}, {unique: true});
     return mongoose.model('Attribute', schema);
 }();

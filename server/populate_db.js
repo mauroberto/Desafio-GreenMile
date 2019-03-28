@@ -48,7 +48,7 @@ mongoose.connection.on('connected', function(){
         if(i % 10000 == 0 ){
             var newArrayOfClients = listOfClients.slice();
             console.log(counting++);
-            Client.collection.insert(newArrayOfClients, function(err, docs) {
+            Client.collection.insertMany(newArrayOfClients, function(err, docs) {
                 if (err) {
                     console.log("Error!");
                     console.log(error);
@@ -69,7 +69,7 @@ mongoose.connection.on('connected', function(){
 
     console.log(newArrayOfDescriptions.length);
 
-    Attribute.collection.insert(newArrayOfDescriptions, function(err, docs) {
+    Attribute.collection.insertMany(newArrayOfDescriptions, function(err, docs) {
         if (err) {
             console.log("Error!");
             console.log(err);
@@ -78,8 +78,3 @@ mongoose.connection.on('connected', function(){
         }
     });
 });
-
-
-/*
-//console.log(descriptions.length);
-//console.log(s.size);*/

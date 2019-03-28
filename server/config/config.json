@@ -1,0 +1,8 @@
+{ 
+    "dev":{
+        "DBHost": "mongodb://localhost/greenmile" 
+    },
+    "test":{
+        "DBHost": "mongodb://localhost/greenmiletests" 
+    }
+}

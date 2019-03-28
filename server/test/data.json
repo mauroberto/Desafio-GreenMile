@@ -1,0 +1,88 @@
+{
+    "clients":[
+        {
+            "_id": "5c9d29fbcd7049d394076e1f",
+            "name": "Quixada",
+            "latitude": -4.9167557,
+            "longitude": -39.2055092,
+            "description":[
+                "sertão central", "interior"
+            ]
+        },
+        {
+            "_id": "5c9d2a11388216d53cf18f52",
+            "name": "Horizonte",
+            "latitude": -4.0932347,
+            "longitude": -38.5068565,
+            "description":[
+                "região metropolitana", "interior"
+            ]
+        },
+        {
+            "_id": "5c9d2a1a8cc12816f5c6f2f6",
+            "name": "Fortaleza",
+            "latitude": -3.7900979,
+            "longitude": -38.5891584,
+            "description":[
+                "capital"
+            ]
+        },        
+        {
+            "_id": "5c9d2a251e6a406082e12074",
+            "name": "Pacajus",
+            "latitude": -4.1779033,
+            "longitude": -38.4810193,
+            "description":[
+                "região metropolitana", "interior"
+            ]
+        },
+        {
+            "_id": "5c9d2a5f9cb0f3638e05bce5",
+            "name": "Quixeramobim",
+            "latitude": -5.1975061,
+            "longitude": -39.2997464,
+            "description":[
+                "sertão central", "interior"
+            ]
+        },
+        {
+            "_id": "5c9d2a6b82edf5088c6e9205",
+            "name": "Cedro",
+            "latitude": -6.5783991,
+            "longitude": -39.1787392,
+            "description":[
+                "sertão central", "interior"
+            ]
+        }
+    ],
+    "attributes":[
+        {
+            "_id": "5c9d2abfe725badac80f3a7d",
+            "name": "interior",
+            "clients":[
+                "5c9d2a251e6a406082e12074", "5c9d2a5f9cb0f3638e05bce5", "5c9d2a6b82edf5088c6e9205", "5c9d29fbcd7049d394076e1f"
+            ]
+        },
+        {
+            "_id": "5c9d2ac6df1c853f04b5fe0c",
+            "name": "sertão central",
+            "clients":[
+                "5c9d2a5f9cb0f3638e05bce5", "5c9d2a6b82edf5088c6e9205", "5c9d29fbcd7049d394076e1f"
+            ]
+        },
+        {
+            "_id": "5c9d2acc1cc3687a3a5264ac",
+            "name": "capital",
+            "clients":[
+                "5c9d2a1a8cc12816f5c6f2f6"
+            ]
+        },
+        {
+            "_id": "5c9d2ad25bd87ddf406cf5cd",
+            "name": "região metropolinata",
+            "clients":[
+                "5c9d2a251e6a406082e12074",  "5c9d2a11388216d53cf18f52"
+            ]
+        }
+    ]
+}

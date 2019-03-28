@@ -114,6 +114,10 @@ module.exports.kNearests = function(distances, k){
 }
 
 
+// Recebe um code de um ponto e um inteiro
+// Busca os nResults pontos mais próximos do ponto com _id == code
+// A complexidade esperada dessa função é O(N), em que N é o número de clientes no banco
+// A complexidade de memória é O(N)
 module.exports.findNearest = function(req, res){
     let idClient = req.params.code;
     let k = req.params.nResults;
@@ -147,6 +151,10 @@ module.exports.findNearest = function(req, res){
     )
 }
 
+// Recebe um code de um ponto, um inteiro nResults e uma string attr
+// Busca os nResults pontos mais próximos do ponto com _id == code e que possuem attr como atributo
+// A complexidade dessa função é O(lgM + N), em que M é o número de atributos distintos existentes no banco e N é o número de clientes com tal atributo
+// A complexidade de memória é O(N)
 module.exports.findNearestWithAttribute = function(req, res){
     let idClient = req.params.code;
     let k = req.params.nResults;
@@ -157,12 +165,7 @@ module.exports.findNearestWithAttribute = function(req, res){
             let promise2 = Attribute.findOne({"name": attr}).populate('clients').exec();
             promise2.then(
                 function(attribute){
-
-                    console.log(attribute.clients[0]);
-
                     var clients = attribute.clients;
-
-                    console.log(clients);
                     
                     var distances = module.exports.calculateDistances(client, clients);
 
