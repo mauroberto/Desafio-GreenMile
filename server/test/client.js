@@ -33,19 +33,19 @@ describe('Populate database', () => {
 });
 
 describe('FindNearests', () => {
-    it('it should GET all the books', (done) => {
+    it('Deve retornar as duas cidades mais próximas de Horizonte (Fortaleza e Pacajus)', (done) => {
         chai.request(server)
-            .get('/book')
+            .get('/api/findNearests/5c9d2a11388216d53cf18f52/2')
             .end((err, res) => {
                 res.should.have.status(200);
                 res.body.should.be.a('array');
-                res.body.length.should.be.eql(0);
+                res.body.length.should.be.eql(2);
                 done();
             });
     });
 });
 
-describe('/GET book', () => {
+describe('Find k Nearests', () => {
     it('it should not POST a book without pages field', (done) => {
         let book = {
             title: "The Lord of the Rings",
