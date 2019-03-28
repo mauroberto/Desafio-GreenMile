@@ -23,13 +23,13 @@ const index = require('./app/controllers/clients')
 
 test('Particionar Vetor', (t) => {
     var distances = [
-        {_id: 1, value: 10}, 
-        {_id: 2, value: 3}, 
-        {_id: 3, value: 20},
-        {_id: 4, value: 15},
-        {_id: 5, value: 2},
-        {_id: 6, value: 150},
-        {_id: 7, value: 1}
+        {_id: 1, value: 10, client: {}}, 
+        {_id: 2, value: 3, client: {}}, 
+        {_id: 3, value: 20, client: {}},
+        {_id: 4, value: 15, client: {}},
+        {_id: 5, value: 2, client: {}},
+        {_id: 6, value: 150, client: {}},
+        {_id: 7, value: 1, client: {}}
     ];
 
     var p = index.partition(distances, 3, 0, 6);    
@@ -39,13 +39,13 @@ test('Particionar Vetor', (t) => {
 
 test('Particionar Subvetor', (t) => {
     var distances = [
-        {_id: 1, value: 10}, 
-        {_id: 2, value: 3}, 
-        {_id: 3, value: 20},
-        {_id: 4, value: 15},
-        {_id: 5, value: 2},
-        {_id: 6, value: 150},
-        {_id: 7, value: 1}
+        {_id: 1, value: 10, client: {}}, 
+        {_id: 2, value: 3, client: {}}, 
+        {_id: 3, value: 20, client: {}},
+        {_id: 4, value: 15, client: {}},
+        {_id: 5, value: 2, client: {}},
+        {_id: 6, value: 150, client: {}},
+        {_id: 7, value: 1, client: {}}
     ];
 
     var p = index.partition(distances, 3, 3, 6);    
@@ -55,13 +55,13 @@ test('Particionar Subvetor', (t) => {
 
 test('Particionar Subvetor 2', (t) => {
     var distances = [
-        {_id: 1, value: 10}, 
-        {_id: 2, value: 3}, 
-        {_id: 3, value: 20},
-        {_id: 4, value: 15},
-        {_id: 5, value: 2},
-        {_id: 6, value: 150},
-        {_id: 7, value: 1}
+        {_id: 1, value: 10, client: {}}, 
+        {_id: 2, value: 3, client: {}}, 
+        {_id: 3, value: 20, client: {}},
+        {_id: 4, value: 15, client: {}},
+        {_id: 5, value: 2, client: {}},
+        {_id: 6, value: 150, client: {}},
+        {_id: 7, value: 1, client: {}}
     ];
 
     var p = index.partition(distances, 6, 3, 6);    
@@ -102,20 +102,20 @@ var validatekNearests = function(returned, expected){
 
 test('k mais próximos', (t) => {
     var distances = [
-        {_id: 1, value: 10}, 
-        {_id: 2, value: 3}, 
-        {_id: 3, value: 20},
-        {_id: 4, value: 15},
-        {_id: 5, value: 2},
-        {_id: 6, value: 150},
-        {_id: 7, value: 1}
+        {_id: 1, value: 10, client: {}}, 
+        {_id: 2, value: 3, client: {}}, 
+        {_id: 3, value: 20, client: {}},
+        {_id: 4, value: 15, client: {}},
+        {_id: 5, value: 2, client: {}},
+        {_id: 6, value: 150, client: {}},
+        {_id: 7, value: 1, client: {}}
     ];
 
     var returned = index.kNearests(distances, 3);    
     var expected = [ 
-        {_id: 2, value: 3}, 
-        {_id: 5, value: 2},
-        {_id: 7, value: 1}
+        {_id: 2, value: 3, client: {}}, 
+        {_id: 5, value: 2, client: {}},
+        {_id: 7, value: 1, client: {}}
     ];
 
     t.assert(validatekNearests(returned, expected) == true, "Selecionou Corretamente")
@@ -124,22 +124,22 @@ test('k mais próximos', (t) => {
 
 test('k mais próximos com k > N/2', (t) => {
     var distances = [
-        {_id: 1, value: 10}, 
-        {_id: 2, value: 3}, 
-        {_id: 3, value: 20},
-        {_id: 4, value: 15},
-        {_id: 5, value: 2},
-        {_id: 6, value: 150},
-        {_id: 7, value: 1}
+        {_id: 1, value: 10, client: {}}, 
+        {_id: 2, value: 3, client: {}}, 
+        {_id: 3, value: 20, client: {}},
+        {_id: 4, value: 15, client: {}},
+        {_id: 5, value: 2, client: {}},
+        {_id: 6, value: 150, client: {}},
+        {_id: 7, value: 1, client: {}}
     ];
 
     var returned = index.kNearests(distances, 5);    
     var expected = [ 
-        {_id: 2, value: 3}, 
-        {_id: 5, value: 2},
-        {_id: 7, value: 1},
-        {_id: 1, value: 10}, 
-        {_id: 4, value: 15}
+        {_id: 2, value: 3, client: {}}, 
+        {_id: 5, value: 2, client: {}},
+        {_id: 7, value: 1, client: {}},
+        {_id: 1, value: 10, client: {}}, 
+        {_id: 4, value: 15, client: {}}
     ];
 
     t.assert(validatekNearests(returned, expected) == true, "Selecionou Corretamente")
@@ -148,21 +148,21 @@ test('k mais próximos com k > N/2', (t) => {
 
 test('k mais próximos subvetor', (t) => {
     var distances = [
-        {_id: 1, value: 10}, 
-        {_id: 2, value: 3}, 
-        {_id: 3, value: 20},
-        {_id: 4, value: 15},
-        {_id: 5, value: 2},
-        {_id: 6, value: 150},
-        {_id: 7, value: 1}
+        {_id: 1, value: 10, client: {}}, 
+        {_id: 2, value: 3, client: {}}, 
+        {_id: 3, value: 20, client: {}},
+        {_id: 4, value: 15, client: {}},
+        {_id: 5, value: 2, client: {}},
+        {_id: 6, value: 150, client: {}},
+        {_id: 7, value: 1, client: {}}
     ];
 
     index.kNearestsRecursive(distances, 3, 3, 6);
     var returned = distances.slice(3, 6);
     var expected = [ 
-        {_id: 4, value: 15},
-        {_id: 5, value: 2},
-        {_id: 7, value: 1}
+        {_id: 4, value: 15, client: {}},
+        {_id: 5, value: 2, client: {}},
+        {_id: 7, value: 1, client: {}}
     ];
 
     t.assert(validatekNearests(returned, expected) == true, "Selecionou Corretamente")
@@ -172,24 +172,24 @@ test('k mais próximos subvetor', (t) => {
 
 test('k mais próximos com k > N', (t) => {
     var distances = [
-        {_id: 1, value: 10}, 
-        {_id: 2, value: 3}, 
-        {_id: 3, value: 20},
-        {_id: 4, value: 15},
-        {_id: 5, value: 2},
-        {_id: 6, value: 150},
-        {_id: 7, value: 1}
+        {_id: 1, value: 10, client: {}}, 
+        {_id: 2, value: 3, client: {}}, 
+        {_id: 3, value: 20, client: {}},
+        {_id: 4, value: 15, client: {}},
+        {_id: 5, value: 2, client: {}},
+        {_id: 6, value: 150, client: {}},
+        {_id: 7, value: 1, client: {}}
     ];
 
     var returned = index.kNearests(distances, 15);    
     var expected = [ 
-        {_id: 1, value: 10}, 
-        {_id: 2, value: 3}, 
-        {_id: 3, value: 20},
-        {_id: 4, value: 15},
-        {_id: 5, value: 2},
-        {_id: 6, value: 150},
-        {_id: 7, value: 1}
+        {_id: 1, value: 10, client: {}}, 
+        {_id: 2, value: 3, client: {}}, 
+        {_id: 3, value: 20, client: {}},
+        {_id: 4, value: 15, client: {}},
+        {_id: 5, value: 2, client: {}},
+        {_id: 6, value: 150, client: {}},
+        {_id: 7, value: 1, client: {}}
     ];
 
     t.assert(validatekNearests(returned, expected) == true, "Selecionou Corretamente")
@@ -198,13 +198,13 @@ test('k mais próximos com k > N', (t) => {
 
 test('k mais próximos com k == 0', (t) => {
     var distances = [
-        {_id: 1, value: 10}, 
-        {_id: 2, value: 3}, 
-        {_id: 3, value: 20},
-        {_id: 4, value: 15},
-        {_id: 5, value: 2},
-        {_id: 6, value: 150},
-        {_id: 7, value: 1}
+        {_id: 1, value: 10, client: {}}, 
+        {_id: 2, value: 3, client: {}}, 
+        {_id: 3, value: 20, client: {}},
+        {_id: 4, value: 15, client: {}},
+        {_id: 5, value: 2, client: {}},
+        {_id: 6, value: 150, client: {}},
+        {_id: 7, value: 1, client: {}}
     ];
 
     var returned = index.kNearests(distances, 0);    

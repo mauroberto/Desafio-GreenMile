@@ -7,7 +7,7 @@ module.exports.getDistanceFromLatLonInKm = function(lat1,lon1,lat2,lon2) {
     var dLat = (lat2-lat1) * (Math.PI/180);
     var dLon = (lon2-lon1) * (Math.PI/180); 
     var a = Math.sin(dLat/2) * Math.sin(dLat/2) +
-      Math.cos(deg2rad(lat1)) * Math.cos(deg2rad(lat2)) * 
+      Math.cos(lat1 * (Math.PI/180)) * Math.cos(lat2 * (Math.PI/180)) * 
       Math.sin(dLon/2) * Math.sin(dLon/2); 
     var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a)); 
     var d = R * c;
@@ -28,8 +28,9 @@ module.exports.calculateDistances = function(client, listOfClients){
 
         distances.push({
             _id: listOfClients[i]._id,
-            value: getDistanceFromLatLonInKm(client.latitude, client.longitude, 
-                    listOfClients[i].latitude, listOfClients[i].longitude)
+            value: this.getDistanceFromLatLonInKm(client.latitude, client.longitude, 
+                listOfClients[i].latitude, listOfClients[i].longitude),
+            client: listOfClients[i]
         });
     }
 
@@ -101,10 +102,32 @@ module.exports.kNearests = function(distances, k){
 
 
 module.exports.findNearest = function(req, res){
-    let promise = User.find();
+    let idClient = req.params.code;
+    console.log(idClient);
+    let k = req.params.nResults;
+    console.log(k);
+    let promise = Client.findOne({"_id": idClient});
+    
     promise.then(
-        function(users){
-            res.json(users);
+        function(client){
+            let promise2 = Client.find();
+            promise2.then(
+                function(clients){
+                    var distances = module.exports.calculateDistances(client, clients);
+                    var nearests = module.exports.kNearests(distances, k);
+
+                    var nearestClients = [].map.call(nearests, function(obj) {
+                        return obj.client;
+                    });
+
+                    res.json(nearestClients);
+                }
+            ).catch(
+                function(error){
+                    console.log(error);
+                    res.status(500).end();
+                }
+            )
         }
     ).catch(
         function(error){
@@ -123,6 +146,22 @@ module.exports.findNearestWithAttribute = function(req, res){
     ).catch(
         function(error){
             res.status(404).send("Não existe");
+        }
+    )
+}
+
+module.exports.insertClient = function(client){
+    let promise = Client.create(client);
+    promise.then(
+        function(client){
+            console.log("deu certo!");
+            return true;
+        }
+    ).catch(
+        function(error){
+            console.log(error);
+            console.log("deu ruim!");
+            return false;
         }
     )
 }
