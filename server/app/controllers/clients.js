@@ -136,14 +136,13 @@ module.exports.findNearest = function(req, res){
                 }
             ).catch(
                 function(error){
-                    console.log(error);
-                    res.status(500).end();
+                    res.status(404).end();
                 }
             )
         }
     ).catch(
         function(error){
-            res.status(500).end();
+            res.status(404).end();
         }
     )
 }
@@ -155,13 +154,15 @@ module.exports.findNearestWithAttribute = function(req, res){
     let promise = Client.findOne({"_id": idClient});
     promise.then(
         function(client){
-            let promise2 = Attribute.find({"name": attr}).populate('clients');
+            let promise2 = Attribute.findOne({"name": attr}).populate('clients').exec();
             promise2.then(
                 function(attribute){
-                    console.log(attribute);
+
+                    console.log(attribute.clients[0]);
+
                     var clients = attribute.clients;
 
-                    console.log(attribute.clients);
+                    console.log(clients);
                     
                     var distances = module.exports.calculateDistances(client, clients);
 
@@ -175,8 +176,7 @@ module.exports.findNearestWithAttribute = function(req, res){
                 }
             ).catch(
                 function(error){
-                    console.log(error);
-                    res.status(500).end();
+                    res.status(404).end();
                 }
             )
         }

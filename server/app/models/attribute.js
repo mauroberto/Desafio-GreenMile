@@ -5,10 +5,10 @@ module.exports = function(){
             type: String,
             required: true
         },
-        clients: {
-            type: [mongoose.Schema.ObjectId],
+        clients: [{
+            type: mongoose.Schema.Types.ObjectId,
             ref: 'Client'
-        }
+        }]
     });
     return mongoose.model('Attribute', schema);
 }();

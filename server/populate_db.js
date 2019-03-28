@@ -14,7 +14,7 @@ mongoose.connection.on('connected', function(){
     var listOfClients = [];
 
     var counting = 0;
-    for(var i=1; i <= 30000; i++){
+    for(var i=1; i <= 100000; i++){
 
         var description = [];
     
