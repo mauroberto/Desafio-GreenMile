@@ -4,7 +4,9 @@ let Client = require('./app/models/client');
 let Attribute = require('./app/models/attribute');
 var faker = require('faker');
 
-mongoose.connect('mongodb://localhost/greenmile', {useNewUrlParser: true});
+let config = require('./config/config');
+
+mongoose.connect(global.gConfig.DBHost, {useNewUrlParser: true});
 
 mongoose.connection.on('connected', function(){
     console.log("Preenchendo!");

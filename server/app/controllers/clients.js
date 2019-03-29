@@ -22,7 +22,7 @@ module.exports.getDistanceFromLatLonInKm = function(lat1,lon1,lat2,lon2) {
 module.exports.calculateDistances = function(client, listOfClients){
     var distances = [];
 
-    if(client == undefined || listOfClients == undefined) return [];
+    if (client === undefined || listOfClients === undefined) return [];
 
     for (var i = 0; i < listOfClients.length; i++){
         if(listOfClients[i]._id.equals(client._id)){     //Eliminando o cliente passado como parâmetro
