@@ -1,8 +1,8 @@
 { 
     "dev":{
-        "DBHost": "mongodb://localhost/greenmile" 
+        "DBHost": "mongodb+srv://desafio-greenmile:desafio-greenmile@desafio-greenmile-lnnga.mongodb.net/greenmile?retryWrites=true" 
     },
     "test":{
-        "DBHost": "mongodb://localhost/greenmiletests" 
+        "DBHost": "mongodb+srv://desafio-greenmile:desafio-greenmile@desafio-greenmile-lnnga.mongodb.net/greenmiletests?retryWrites=true" 
     }
 }
