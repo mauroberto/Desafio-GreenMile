@@ -1,46 +1,47 @@
 var map;
+var clients = [];
+var attributes = [];
+var clientsSearch = [];
+var clientsSearchMarkers = [];
+var clientSelectedMarker = null;
+var latlngbounds;
 
 var initialize = function() {
     var brazil = {lat: -18.8800397, lng: 47.05878999999999};
     map = new google.maps.Map(document.getElementById('map'), {zoom: 4, center: brazil});
+    latlngbounds = new google.maps.LatLngBounds();
+}
+
+var addMarker = function(point, marker_img){
+    var marker = new google.maps.Marker({
+        position: new google.maps.LatLng(point.latitude, point.longitude),
+        title: point.name,
+        map: map,
+        icon: marker_img
+    });
+
+    var infowindow = new google.maps.InfoWindow(), marker;
+
+    google.maps.event.addListener(marker, 'click', (function(marker, i) {
+        return function() {
+            infowindow.setContent(point.name);
+            infowindow.open(map, marker);
+        }
+    })(marker))
+
+    latlngbounds.extend(marker.position);
+
+    return marker;
+}
+
+var clearMarkers = function(){
+    for (var i = 0; i < clientsSearchMarkers.length; i++ ) {
+        clientsSearchMarkers[i].setMap(null);
+    }
+    clientsSearchMarkers.length = 0;
 }
 
 $(function(){
-    var clients = [];
-    var attributes = [];
-    var clientsSearch = [];
-    var clientsSearchMarkers = [];
-    var clientSelectedMarker = null;
-    var latlngbounds = new google.maps.LatLngBounds();;
-
-    var addMarker = function(point, marker_img){
-        var marker = new google.maps.Marker({
-            position: new google.maps.LatLng(point.latitude, point.longitude),
-            title: point.name,
-            map: map,
-            icon: marker_img
-        });
-
-        var infowindow = new google.maps.InfoWindow(), marker;
-    
-        google.maps.event.addListener(marker, 'click', (function(marker, i) {
-            return function() {
-                infowindow.setContent(point.name);
-                infowindow.open(map, marker);
-            }
-        })(marker))
-
-        latlngbounds.extend(marker.position);
-
-        return marker;
-    }
-
-    var clearMarkers = function(){
-        for (var i = 0; i < clientsSearchMarkers.length; i++ ) {
-            clientsSearchMarkers[i].setMap(null);
-        }
-        clientsSearchMarkers.length = 0;
-    }
 
     $inputClients = $("#inputClients");
 
@@ -50,11 +51,6 @@ $(function(){
         for(var i=0; i < clients.length; i++){
             $inputClients.append("<option value='"+i+"'>"+clients[i].name+"</option>")
         }
-
-        /*if(clients.length > 0){
-            clientSelectedMarker = addMarker(clients[0], "img/marker2.png");
-            map.setCenter({lat: clients[0].latitude, lng: clients[0].longitude});
-        }*/
     });
 
     $.get("/api/attributes", function(data){
@@ -112,8 +108,6 @@ $(function(){
             for(var i=0; i < clientsSearch.length; i++){
                clientsSearchMarkers.push(addMarker(clientsSearch[i], "img/marker.png"));
             }
-
-            //var markerCluster = new MarkerClusterer(map, clientsSearchMarkers);
 
             latlngbounds.extend(clientSelectedMarker.position);
 

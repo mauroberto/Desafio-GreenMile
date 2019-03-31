@@ -1,5 +1,4 @@
 let mongoose = require('mongoose');
-//let controller = require('./app/controllers/clients');
 let Client = require('./app/models/client');
 let Attribute = require('./app/models/attribute');
 var faker = require('faker');

@@ -19,6 +19,7 @@ module.exports = function(){
     app.use(bodyParser.urlencoded({ extended: false}));
     app.use(express.static('public'));
     app.use('/node_modules', express.static('node_modules'));
+    app.use('/api', express.static('apidoc'));
     
     app.use(allowCrossDomain);
 
