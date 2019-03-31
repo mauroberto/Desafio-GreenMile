@@ -185,7 +185,34 @@ module.exports.findNearestWithAttribute = function(req, res){
         }
     ).catch(
         function(error){
-            res.status(404).send("Não existe");
+            res.status(404).end();
+        }
+    )
+}
+
+
+module.exports.findClients = function(req, res){
+    let promise = Client.find().limit(100);
+    promise.then(
+        function(clients){
+            res.json(clients);
+        }
+    ).catch(
+        function(error){
+            res.status(404).end();
+        }
+    )
+}
+
+module.exports.findAttributes = function(req, res){
+    let promise = Attribute.find({}, {'_id': false, 'clients': false});
+    promise.then(
+        function(attributes){
+            res.json(attributes);
+        }
+    ).catch(
+        function(error){
+            res.status(404).end();
         }
     )
 }

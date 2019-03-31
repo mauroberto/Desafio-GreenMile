@@ -18,7 +18,8 @@ module.exports = function(){
     app.use(bodyParser.json());
     app.use(bodyParser.urlencoded({ extended: false}));
     app.use(express.static('public'));
-
+    app.use('/node_modules', express.static('node_modules'));
+    
     app.use(allowCrossDomain);
 
     clientsRouter(app);

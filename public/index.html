@@ -5,18 +5,40 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Desafio GreenMile</title>
+    <link rel="stylesheet" href="/node_modules/bootstrap/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="http://code.jquery.com/ui/1.12.1/themes/smoothness/jquery-ui.css" />
 </head>
 <body>
-    <h1>Teste</h1>
-    <div class="container">
-        <div id="options">
-            
-        </div>
-        <div id="map">
+    <div id="options">
+        <form>
+            <div class="form-row">
+                <div class="col-6">
+                    <input type="text" class="form-control" placeholder="Atributo - Use o autocomplete para escolher um atributo existente" id="attr">
+                </div>
+                <div class="col-3">
+                    <select id="inputClients" class="form-control">
+                        <option value="-1" selected>Escolha o cliente</option>
+                    </select>
+                </div>
+                <div class="col-2">
+                    <input type="number" id="n" min="0" value="10" class="form-control" placeholder="N">
+                </div>
+                <div class="col-1">
+                    <input type="submit" class="btn btn-primary form-control" value="Ok">
+                </div>
+            </div>
+        </form>
+    </div>
+    <div id="map">
 
-        </div>
     </div>
 
-    <script src="clients.js"></script>
+    <script src="/node_modules/jquery/dist/jquery.min.js"></script>
+    <script src="http://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+    <script src="/node_modules/bootstrap/dist/js/bootstrap.min.js"></script>
+    <script src="script.js"></script>
+    <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDE_6lHZ7HBcPg_aMu5Z4DbX8ZtcRTivZs&callback=initialize"></script>
+    <script src="/node_modules/@google/markerclusterer/src/markerclusterer.js"></script>
 </body>
 </html>
