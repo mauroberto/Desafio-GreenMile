@@ -37,9 +37,13 @@ double findMedian(std::vector<double>& vec){
 }
 
 // Encontra a mediana do vetor distances em O(N)
-double findMedianOfMedians(int begin, int end){
-    int n = (end - begin) + 1;
+double findMedianOfMedians(std::vector<double> & vec){
+    int n = vec.size();
     std::vector<double> medians;
+
+    if(n == 0) return 0.0;
+    if(n == 1) return vec[0];
+    if(n == 2) return (vec[0] + vec[1])/2;
 
     int count = 0;
     while (count < n) {    
@@ -47,7 +51,7 @@ double findMedianOfMedians(int begin, int end){
         std::vector<double> row;
 
         while ((countRow < 5) && (count < n)) {
-            row.push_back(distances[begin+count].second);
+            row.push_back(vec[count]);
             count++;
             countRow++;
         }
@@ -56,7 +60,7 @@ double findMedianOfMedians(int begin, int end){
         medians.push_back(m);
     }
 
-    return findMedian(medians);
+    return findMedianOfMedians(medians);
 }
 
 // Calcula a distância em km entre duas coordenadas
@@ -121,7 +125,13 @@ void kNearestsRecursive(int k, int begin, int end){
         return;
     } else{
 
-        double m = findMedianOfMedians(begin, end); // Calcula a mediana do vetor
+        std::vector<double> vec;
+
+        for(int i = begin; i <= end; i++){
+            vec.push_back(distances[i].second);
+        }
+
+        double m = findMedianOfMedians(vec); // Calcula a mediana do vetor
 
         int p = partition(m, begin, end); // Particiona e devolve a posição de m no vetor
         

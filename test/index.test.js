@@ -84,8 +84,6 @@ test('k mais próximos', (t) => {
     var returned = AddonKNearests.kNearests(client, clients, 3);    
     var expected = [0, 2, 3];
 
-    console.log(returned);
-
     t.assert(validatekNearests(returned, expected) == true, "Selecionou Corretamente")
     t.end()  
 })

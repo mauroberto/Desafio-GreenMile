@@ -16,6 +16,7 @@ chai.use(chaiHttp);
 
 describe('Clients', () => {
     before(function(done) {
+        this.enableTimeouts(false);
         Client.remove({}, (err) => { 
             for (var i = 0; i < data.clients.length; i++){
                 data.clients[i]._id = new ObjectID(data.clients[i]._id);
