@@ -23,7 +23,7 @@ npm start
 ```
 npm test
 ```
-Os testes automatizados estão no diretório [`test`](https://github.com/mauroberto/Desafio-GreenMile/tree/master/test)
+Os testes automatizados estão no diretório [`test`](https://github.com/mauroberto/Desafio-GreenMile/tree/master/test).
 
 ## Estratégias usadas
 
