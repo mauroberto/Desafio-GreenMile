@@ -4,7 +4,9 @@
 [Descrição da API](http://ec2-18-231-176-67.sa-east-1.compute.amazonaws.com:3000/api)
 
 ## Dependências
-
+[NodeJS](https://nodejs.org/)
+[MongoDB](https://www.mongodb.com/)
+[Node-gyp](https://github.com/nodejs/node-gyp)
 
 ## Build Project
 ```
@@ -44,8 +46,8 @@ O código fonte está em `app/controllers/clients.js`.
 
 ## O que poderia ser melhor
 
-A busca 1 poderia ser feita em paralelo. Podemos dividir a lista em partes menores e usar threads para executar o algoritmo da busca 1 em cada parte (escolhendo os `k` mais próximos de cada parte). Ao final, bastava aplicar o mesmo algoritmo na lista resultante considerando apenas o `k` elementos devolvidos de cada parte. Como o servidor que estou usando na aws possui apenas um *core*, essa estratégia não ajudaria :(
+1) A busca 1 poderia ser feita em paralelo. Podemos dividir a lista em partes menores e usar threads para executar o algoritmo da busca 1 em cada parte (escolhendo os `k` mais próximos de cada parte). Ao final, bastava aplicar o mesmo algoritmo na lista resultante considerando apenas o `k` elementos devolvidos de cada parte. Como o servidor que estou usando na aws possui apenas um *core*, essa estratégia não ajudaria :(
 
-Talvez fosse possível adaptar o algoritmo de Kirkpatrick (1983) [[1]](http://www.ic.unicamp.br/~rezende/ensino/mo619/Voronoi-diagrams-Delaunay-triangulation-Slides.pdf)[[2]](http://cglab.ca/~cdillaba/comp5008/kirkpatrick.html) para esse problema. Nesse algoritmo, é feito um pré-processamento dos pontos em `O(N lg(N))` (usando `O(N)` de memória) e ele permite fazer *queries* do ponto mais próximos em `O(lg(N))`.
+2) Talvez fosse possível adaptar o algoritmo de Kirkpatrick (1983) [[1]](http://www.ic.unicamp.br/~rezende/ensino/mo619/Voronoi-diagrams-Delaunay-triangulation-Slides.pdf)[[2]](http://cglab.ca/~cdillaba/comp5008/kirkpatrick.html) para esse problema. Nesse algoritmo, é feito um pré-processamento dos pontos em `O(N lg(N))` (usando `O(N)` de memória) e ele permite fazer *queries* do ponto mais próximos em `O(lg(N))`.
 
-O mongodb já implementa um algoritmo interno para calcular os pontos mais próximos, usá-lo possívelmente irá melhorar o desempenho, já que o banco não precisará retornar todos os dados para a aplicação. 
+3) O mongodb já implementa um algoritmo interno para calcular os pontos mais próximos, usá-lo possívelmente irá melhorar o desempenho, já que o banco não precisará retornar todos os dados para a aplicação. 
