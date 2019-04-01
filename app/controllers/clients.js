@@ -4,12 +4,12 @@ let Attribute = require('../models/attribute');
 
 // Recebe um code de um ponto e um inteiro
 // Busca os nResults pontos mais próximos do ponto com _id == code
-// A complexidade esperada dessa função é O(N), em que N é o número de clientes no banco
+// A complexidade dessa função é O(N), em que N é o número de clientes no banco
 // A complexidade de memória é O(N)
 module.exports.findNearest = function(req, res){
     let idClient = req.params.code;
     let k = req.params.nResults;
-    let promise = Client.findOne({"_id": idClient});
+    let promise = Client.findOne({"_id": idClient}, {"description": false});
     
     promise.then(
         function(client){

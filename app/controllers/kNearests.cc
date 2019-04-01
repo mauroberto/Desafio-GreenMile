@@ -25,16 +25,7 @@ class Client {
     public: 
         double latitude;
         double longitude;
-    
-        void print(){
-            std::cout << latitude << " " << longitude << std::endl;
-        }
 }; 
-
-int getRandomNumber(int min, int max){
-    int r = (std::rand() % (max - min + 1)) + min;
-    return r;
-}
 
 // Calcula a mediana de um vetor de tamanho 5 em O(1)
 double findMedian(std::vector<double>& vec){
@@ -117,7 +108,7 @@ int partition(double m, int begin, int end){
 
 // Recebe uma lista de distâncias, um inteiro k, um inteiro begin (que indica em que índice começa a lista) e um inteiro end (que indica onde termina a lista)
 // Devolve as k menores distâncias da lista
-// A complexidade esperada é de O(N), em que N é o número de elementos no intervalo [begin, end] da lista
+// A complexidade é de O(N), em que N é o número de elementos no intervalo [begin, end] da lista
 // A complexidade de memória é O(N)
 void kNearestsRecursive(int k, int begin, int end){
     int n = (end - begin) + 1;
