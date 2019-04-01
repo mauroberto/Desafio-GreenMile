@@ -8,22 +8,22 @@
 [MongoDB](https://www.mongodb.com/)  
 [Node-gyp](https://github.com/nodejs/node-gyp)  
 
-## Build Project
+## Build Projeto
 ```
 npm install
 npm run build
 ```
 
-## Run Project
+## Executar Projeto
 ```
 npm start
 ```
 
-## Run Tests
-Os testes automatizados estão no diretório [`test`](https://github.com/mauroberto/Desafio-GreenMile/tree/master/test)
+## Executar Testes
 ```
 npm test
 ```
+Os testes automatizados estão no diretório [`test`](https://github.com/mauroberto/Desafio-GreenMile/tree/master/test)
 
 ## Estratégias usadas
 
