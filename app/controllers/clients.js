@@ -1,3 +1,4 @@
+let AddonKNearests = require('../../build/Release/kNearests');
 let Client = require('../models/client');
 let Attribute = require('../models/attribute');
 
@@ -15,7 +16,6 @@ module.exports.getDistanceFromLatLonInKm = function(lat1,lon1,lat2,lon2) {
     return d;
 }
 
-
 // Recebe como entrada um cliente e uma lista de clientes
 // Calcula a distância do cliente recebido no primeiro parâmetro para toda a lista de clientes passada no segundo parâmetro
 // Devolve uma lista de objetos, em que cada objeto contém a distância em KM e o código do cliente  
@@ -30,89 +30,14 @@ module.exports.calculateDistances = function(client, listOfClients){
         }
 
         distances.push({
-            _id: listOfClients[i]._id,
+            id: i,
             value: this.getDistanceFromLatLonInKm(client.latitude, client.longitude, 
-                listOfClients[i].latitude, listOfClients[i].longitude),
-            client: listOfClients[i]
+                listOfClients[i].latitude, listOfClients[i].longitude)        
         });
     }
 
     return distances;
 }
-
-
-// Recebe uma lista de distâncias, um inteiro p, o início da lista (begin) e o fim da lista (end)
-// Modifica a lista de forma semelhante ao particionamento do quicksort, os valores melhores ou iguais ao da posição p são colocados a esquerda e os maiores a direita
-// A compleixade de tempo é O(N), em que N é o número de elementos no intervalo [begin, end]
-// Modifica a lista e devolve a posição de p na nova lista
-module.exports.partition = function(distances, p, begin, end){
-
-    if (begin >= end || distances == undefined || distances.length == 0) {
-        return -1;
-    }
-
-    [distances[p], distances[end]] = [distances[end], distances[p]]; //swap end e p
-
-    p = end;
-
-    var start = begin - 1;
-
-    for (var i = begin; i <= end - 1; i++){
-        if (distances[i].value <= distances[p].value){
-            start ++;
-            [distances[start], distances[i]] = [distances[i], distances[start]];
-        }
-    }
-
-    [distances[start + 1], distances[p]] = [distances[p], distances[start + 1]];
-    p = start + 1;
-
-    return p;
-}
-
-
-// Recebe uma lista de distâncias, um inteiro k, um inteiro begin (que indica em que índice começa a lista) e um inteiro end (que indica onde termina a lista)
-// Devolve as k menores distâncias da lista
-// A complexidade esperada é de O(N), em que N é o número de elementos no intervalo [begin, end]
-// No pior caso, a complexidade é O(N^2), mas o pior caso é muito difícil de acontecer
-// A complexidade de memória é O(N)
-module.exports.kNearestsRecursive = function(distances, k, begin, end){
-    var n = (end - begin) + 1;
-
-    if(distances == undefined || k == 0 || n == 0){
-        return;
-    }
-
-    if (n <= k || k == 0){
-        return;
-    } else{
-        var p = begin + Math.floor(Math.random() * n); // Escolhe aleatoriamente uma posição no intervalo [begin, end] para ser o pivô
-
-        p = this.partition(distances, p, begin, end); // Atualiza o pivô para a posição correta
-        
-        var smallersEqThanPivot = (p - begin + 1); 
-
-        if(smallersEqThanPivot == k){
-            return;
-        }else if(smallersEqThanPivot > k){
-            this.kNearestsRecursive(distances, k, begin, p - 1); 
-        } else {
-            this.kNearestsRecursive(distances, k - smallersEqThanPivot, p + 1, end);
-        }
-    }
-}
-
-// Recebe uma lista de distâncias e um inteiro k
-// Devolve as k menores distâncias da lista
-// Utiliza a função kNearestsRecursive para modificar a lista e devolve apenas os primeiros k elementos da lista modificada
-module.exports.kNearests = function(distances, k){
-    if(distances == undefined || k == 0 || distances.length == 0){
-        return [];
-    }
-    this.kNearestsRecursive(distances, k, 0, distances.length - 1);
-    return distances.slice(0, k);
-}
-
 
 // Recebe um code de um ponto e um inteiro
 // Busca os nResults pontos mais próximos do ponto com _id == code
@@ -130,10 +55,10 @@ module.exports.findNearest = function(req, res){
                 function(clients){
                     var distances = module.exports.calculateDistances(client, clients);
 
-                    var nearests = module.exports.kNearests(distances, k);
+                    var nearests = AddonKNearests.kNearests(distances, k);
 
                     var nearestClients = [].map.call(nearests, function(obj) {
-                        return obj.client;
+                        return clients[obj];
                     });
 
                     res.json(nearestClients);
@@ -169,10 +94,10 @@ module.exports.findNearestWithAttribute = function(req, res){
                     
                     var distances = module.exports.calculateDistances(client, clients);
 
-                    var nearests = module.exports.kNearests(distances, k);
+                    var nearests = AddonKNearests.kNearests(distances, k);
 
                     var nearestClients = [].map.call(nearests, function(obj) {
-                        return obj.client;
+                        return clients[obj];
                     });
 
                     res.json(nearestClients);

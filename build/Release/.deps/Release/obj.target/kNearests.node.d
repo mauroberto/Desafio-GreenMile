@@ -1,0 +1,1 @@
+cmd_Release/obj.target/kNearests.node := g++ -shared -pthread -rdynamic -m64  -Wl,-soname=kNearests.node -o Release/obj.target/kNearests.node -Wl,--start-group Release/obj.target/kNearests/app/controllers/kNearests.o -Wl,--end-group 
