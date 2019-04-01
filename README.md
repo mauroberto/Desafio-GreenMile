@@ -31,7 +31,7 @@ Foi implementado um algoritmo que, dado um cliente `C`, uma lista com `N` client
 
 A complexidade desse algoritmo depende da escolha de `P`. Se escolhemos de forma aleatória, a complexidade esperada é `O(N)`, mas no pior caso é `O(N^2)`. A probabilidade do pior caso acontecer é muito pequena. Uma forma de garantir a complexidade de `O(N)` nessa busca foi usar o algoritmo [Median of Medians](https://en.wikipedia.org/wiki/Median_of_medians) para escolher o pivô, porém esse algoritmo tem uma constante muito alta e não melhorou muito o tempo de execução total da busca em relação à escolha aleatória. A complexidade de memória do algoritmo é `O(N)`. 
 
-Por ser uma parte que precisa de maior desempenho, esse algoritmo foi implementado em `C++`. O código fonte está em `app/controllers/kNearests.cc` e em `app/controllers/clients.js`.
+Por ser uma parte que precisa de maior desempenho, esse algoritmo foi implementado em `C++`. O código fonte está em [`app/controllers/kNearests.cc`](https://github.com/mauroberto/Desafio-GreenMile/blob/master/app/controllers/kNearests.cc) e em [`app/controllers/clients.js`](https://github.com/mauroberto/Desafio-GreenMile/blob/master/app/controllers/clients.js).
 
 ### Busca 2:
 A ideia na segunda busca é montar uma árvore binária e balanceada com os atributos, em que cada nó da árvore armazena uma referência para os clientes que possuem tal atributo. Essa ideia permite consultar em `O(lg(M))`, em que `M` é o número de atributos, quais clientes possuem um determinado atributo. Para isso, criamos uma coleção no `mongodb` em que cada elemento é um atributo e armazena uma lista de ids para os clientes que possuem esse atributo. Essa coleção foi indexada pelo nome do atributo, isso faz com que o próprio mongo crie uma árvore binária de busca e realize a operação em `O(lg(N))`.
@@ -42,7 +42,7 @@ A complexidade esperada dessa busca é `O(lg(M) + N)`, em que `N` é o número d
 
 A complexidade para adicionar um novo atributo a um cliente é `O(lg(M))`, pois é necessário inserí-lo na lista do atributo. Já a complexidade de remover um atributo é `O(lg(M) + N)`. 
 
-O código fonte está em `app/controllers/clients.js`.
+O código fonte está em [`app/controllers/clients.js`](https://github.com/mauroberto/Desafio-GreenMile/blob/master/app/controllers/clients.js).
 
 ## O que poderia ser melhor
 
