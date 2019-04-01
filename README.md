@@ -4,9 +4,9 @@
 [Descrição da API](http://ec2-18-231-176-67.sa-east-1.compute.amazonaws.com:3000/api)
 
 ## Dependências
-[NodeJS](https://nodejs.org/)
-[MongoDB](https://www.mongodb.com/)
-[Node-gyp](https://github.com/nodejs/node-gyp)
+[NodeJS](https://nodejs.org/)  
+[MongoDB](https://www.mongodb.com/)  
+[Node-gyp](https://github.com/nodejs/node-gyp)  
 
 ## Build Project
 ```
