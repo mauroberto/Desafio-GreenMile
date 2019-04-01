@@ -5,6 +5,7 @@
 #include <cstdlib>
 #include <ctime>
 #include <math.h>
+#include <algorithm>
 
 namespace demo {
 
@@ -35,6 +36,38 @@ int getRandomNumber(int min, int max){
     return r;
 }
 
+// Calcula a mediana de um vetor de tamanho 5 em O(1)
+double findMedian(std::vector<double>& vec){
+    double median;
+    std::sort(vec.begin(), vec.end());
+    size_t size = vec.size();
+    median = vec[(size/2)];
+    return median;
+}
+
+// Encontra a mediana do vetor distances em O(N)
+double findMedianOfMedians(int begin, int end){
+    int n = (end - begin) + 1;
+    std::vector<double> medians;
+
+    int count = 0;
+    while (count < n) {    
+        int countRow = 0;
+        std::vector<double> row;
+
+        while ((countRow < 5) && (count < n)) {
+            row.push_back(distances[begin+count].second);
+            count++;
+            countRow++;
+        }
+
+        int m = findMedian(row);
+        medians.push_back(m);
+    }
+
+    return findMedian(medians);
+}
+
 // Calcula a distância em km entre duas coordenadas
 // Fonte: https://stackoverflow.com/a/27943
 double getDistanceFromLatLonInKm(double lat1, double lon1, double lat2, double lon2) {
@@ -61,38 +94,30 @@ void calculateDistances(Client& client, std::vector<Client>& listOfClients){
     }
 }
 
-// Recebe uma lista de distâncias, um inteiro p, o início da lista (begin) e o fim da lista (end)
-// Modifica a lista de forma semelhante ao particionamento do quicksort, os valores menores ou iguais ao da posição p são colocados a esquerda e os maiores a direita
-// A compleixade de tempo é O(N), em que N é o número de elementos no intervalo [begin, end]
-// Modifica a lista e devolve a posição de p na nova lista
-int partition(int p, int begin, int end){
+// Recebe um double m, o início da lista (begin) e o fim da lista (end)
+// Modifica a lista de forma semelhante ao particionamento do quicksort, os valores menores ou iguais a m são colocados a esquerda e os maiores a direita
+// A compleixade de tempo é O(N), em que N é o número de elementos no intervalo [begin, end] da lista
+// Modifica a lista e devolve a posição de m na nova lista
+int partition(double m, int begin, int end){
     if (begin >= end || distances.size() == 0) {
         return -1;
     }
 
-    std::swap(distances[p], distances[end]);
-
-    p = end;
-
     int start = begin - 1;
 
-    for (int i = begin; i <= end - 1; i++){
-        if (distances[i].second <= distances[p].second){
+    for (int i = begin; i <= end; i++){
+        if (distances[i].second <= m){
             start ++;
             std::swap(distances[start], distances[i]);
         }
     }
 
-    std::swap(distances[start + 1], distances[p]);
-    p = start + 1;
-
-    return p;
+    return start;
 }
 
 // Recebe uma lista de distâncias, um inteiro k, um inteiro begin (que indica em que índice começa a lista) e um inteiro end (que indica onde termina a lista)
 // Devolve as k menores distâncias da lista
-// A complexidade esperada é de O(N), em que N é o número de elementos no intervalo [begin, end]
-// No pior caso, a complexidade é O(N^2), mas o pior caso é muito difícil de acontecer
+// A complexidade esperada é de O(N), em que N é o número de elementos no intervalo [begin, end] da lista
 // A complexidade de memória é O(N)
 void kNearestsRecursive(int k, int begin, int end){
     int n = (end - begin) + 1;
@@ -104,9 +129,10 @@ void kNearestsRecursive(int k, int begin, int end){
     if (n <= k || k == 0){
         return;
     } else{
-        int p = getRandomNumber(begin, end); // Escolhe aleatoriamente uma posição no intervalo [begin, end] para ser o pivô
 
-        p = partition(p, begin, end); // Atualiza o pivô para a posição correta
+        double m = findMedianOfMedians(begin, end); // Calcula a mediana do vetor
+
+        int p = partition(m, begin, end); // Particiona e devolve a posição de m no vetor
         
         int smallersEqThanPivot = (p - begin + 1); 
 
