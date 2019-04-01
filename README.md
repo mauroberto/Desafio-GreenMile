@@ -1,6 +1,6 @@
 # Desafio-GreenMile
 
-[Demo](http://ec2-18-231-176-67.sa-east-1.compute.amazonaws.com:3000/) usando uma base com `100mil` clientes gerados usando [Faker] (https://www.npmjs.com/package/faker) 
+[Demo](http://ec2-18-231-176-67.sa-east-1.compute.amazonaws.com:3000/) usando uma base com `100mil` clientes gerados usando [Faker](https://www.npmjs.com/package/faker)  
 [Descrição da API](http://ec2-18-231-176-67.sa-east-1.compute.amazonaws.com:3000/api)
 
 ## Dependências
