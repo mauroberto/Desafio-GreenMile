@@ -35,7 +35,7 @@ int getRandomNumber(int min, int max){
     return r;
 }
 
-// Calcula a distância em KM entre duas coordenadas
+// Calcula a distância em km entre duas coordenadas
 // Fonte: https://stackoverflow.com/a/27943
 double getDistanceFromLatLonInKm(double lat1, double lon1, double lat2, double lon2) {
     double R = 6371; // Raio da terra em km
@@ -49,9 +49,9 @@ double getDistanceFromLatLonInKm(double lat1, double lon1, double lat2, double l
     return d;
 }
 
-// Recebe como entrada um cliente e uma lista de clientes
-// Calcula a distância do cliente recebido no primeiro parâmetro para toda a lista de clientes passada no segundo parâmetro
-// Devolve uma lista de objetos, em que cada objeto contém a distância em KM e o código do cliente  
+// Recebe como entrada um cliente client e uma lista de clientes listOfClients
+// Calcula a distância de client para cada cliente de listOfClients
+// Atualiza a lista de distâncias  
 void calculateDistances(Client& client, std::vector<Client>& listOfClients){
     distances.clear();
 
@@ -62,7 +62,7 @@ void calculateDistances(Client& client, std::vector<Client>& listOfClients){
 }
 
 // Recebe uma lista de distâncias, um inteiro p, o início da lista (begin) e o fim da lista (end)
-// Modifica a lista de forma semelhante ao particionamento do quicksort, os valores melhores ou iguais ao da posição p são colocados a esquerda e os maiores a direita
+// Modifica a lista de forma semelhante ao particionamento do quicksort, os valores menores ou iguais ao da posição p são colocados a esquerda e os maiores a direita
 // A compleixade de tempo é O(N), em que N é o número de elementos no intervalo [begin, end]
 // Modifica a lista e devolve a posição de p na nova lista
 int partition(int p, int begin, int end){
@@ -144,9 +144,9 @@ void unpackClients(Isolate * isolate, const v8::FunctionCallbackInfo<v8::Value>&
     }
 }
 
-// Recebe uma lista de distâncias e um inteiro k
-// Devolve as k menores distâncias da lista
-// Utiliza a função kNearestsRecursive para modificar a lista e devolve apenas os primeiros k elementos da lista modificada
+// Recebe um cliente C, umas lista L de clientes e um inteiro k
+// Devolve os k clientes de L mais próximos de C
+// Utiliza as funções kNearestsRecursive e calculateDistances
 void kNearests(const FunctionCallbackInfo<Value>& args) {
     Isolate* isolate = args.GetIsolate();
 
