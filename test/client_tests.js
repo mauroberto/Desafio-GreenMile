@@ -132,13 +132,13 @@ describe('Clients', () => {
                 });
         });
 
-        it('Teste com nResults > N, deve retornar todas as cidades do sertão central', (done) => {
+        it('Teste com nResults > N, deve retornar todas as cidades do sertão central, exceto Quixadá', (done) => {
             chai.request(server)
-                .get('/api/findNearest/5c9d2a11388216d53cf18f52/10/sertão central')
+                .get('/api/findNearest/5c9d29fbcd7049d394076e1f/10/sertão central')
                 .end((err, res) => {
                     res.should.have.status(200);
                     res.body.should.be.a('array');
-                    res.body.length.should.be.eql(3);
+                    res.body.length.should.be.eql(2);
                     done();
                 });
         });
@@ -182,6 +182,15 @@ describe('Clients', () => {
         it('Teste com code válido, mas que não está no banco. Deve retornar 404', (done) => {
             chai.request(server)
                 .get('/api/findNearest/5c9d799d32df2ef47c23a442/5/sertão central')
+                .end((err, res) => {
+                    res.should.have.status(404);
+                    done();
+                });
+        });
+
+        it('Teste com attr que não está no banco. Deve retornar 404', (done) => {
+            chai.request(server)
+                .get('/api/findNearest/5c9d29fbcd7049d394076e1f/5/teste')
                 .end((err, res) => {
                     res.should.have.status(404);
                     done();

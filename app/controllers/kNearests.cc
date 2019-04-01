@@ -1,10 +1,10 @@
-// hello.cc using N-API
+// kNearests.cc using N-API
 #include <node.h>
-
 #include <iostream>
 #include <vector>
 #include <cstdlib>
 #include <ctime>
+#include <math.h>
 
 namespace demo {
 
@@ -12,7 +12,6 @@ using v8::Exception;
 using v8::FunctionCallbackInfo;
 using v8::Isolate;
 using v8::Local;
-using v8::NewStringType;
 using v8::Number;
 using v8::Object;
 using v8::String;
@@ -21,9 +20,45 @@ using v8::Array;
 
 std::vector<std::pair<int, double>> distances;
 
+class Client { 
+    public: 
+        double latitude;
+        double longitude;
+    
+        void print(){
+            std::cout << latitude << " " << longitude << std::endl;
+        }
+}; 
+
 int getRandomNumber(int min, int max){
     int r = (std::rand() % (max - min + 1)) + min;
     return r;
+}
+
+// Calcula a distância em KM entre duas coordenadas
+// Fonte: https://stackoverflow.com/a/27943
+double getDistanceFromLatLonInKm(double lat1, double lon1, double lat2, double lon2) {
+    double R = 6371; // Raio da terra em km
+    double dLat = (lat2-lat1) * (M_PI/180);
+    double dLon = (lon2-lon1) * (M_PI/180); 
+    double a = sin(dLat/2) * sin(dLat/2) +
+      cos(lat1 * (M_PI/180)) * cos(lat2 * (M_PI/180)) * 
+      sin(dLon/2) * sin(dLon/2); 
+    double c = 2 * atan2(sqrt(a), sqrt(1-a)); 
+    double d = R * c;
+    return d;
+}
+
+// Recebe como entrada um cliente e uma lista de clientes
+// Calcula a distância do cliente recebido no primeiro parâmetro para toda a lista de clientes passada no segundo parâmetro
+// Devolve uma lista de objetos, em que cada objeto contém a distância em KM e o código do cliente  
+void calculateDistances(Client& client, std::vector<Client>& listOfClients){
+    distances.clear();
+
+    for (unsigned int i = 0; i < listOfClients.size(); i++){
+        distances.push_back(std::make_pair(i, getDistanceFromLatLonInKm(client.latitude, client.longitude, 
+                listOfClients[i].latitude, listOfClients[i].longitude)));
+    }
 }
 
 // Recebe uma lista de distâncias, um inteiro p, o início da lista (begin) e o fim da lista (end)
@@ -85,40 +120,57 @@ void kNearestsRecursive(int k, int begin, int end){
     }
 }
 
+
+// Transforma um objeto Client JavaScript em Client C++
+Client unpackClient(Isolate * isolate, v8::Local<v8::Value> jsElement){
+    Client client;
+    v8::Handle<v8::Object> client_obj = v8::Handle<v8::Object>::Cast(jsElement);
+    v8::Handle<v8::Value> lat_Value = client_obj->Get(String::NewFromUtf8(isolate,"latitude"));
+    v8::Handle<v8::Value> lon_Value = client_obj->Get(String::NewFromUtf8(isolate,"longitude"));
+    client.latitude = lat_Value->NumberValue();
+    client.longitude = lon_Value->NumberValue();
+
+    return client;
+}
+
+// Transforma um vetor [Client] de JavaScript em um vector<Client> em C++
+void unpackClients(Isolate * isolate, const v8::FunctionCallbackInfo<v8::Value>& args, std::vector<Client>& clients) {
+    clients.clear();
+
+    v8::Local<v8::Array> jsArr = v8::Local<v8::Array>::Cast(args[1]);
+    for (unsigned int i = 0; i < jsArr->Length(); i++) {
+        v8::Local<v8::Value> jsElement = jsArr->Get(i);
+        clients.push_back(unpackClient(isolate, jsElement));
+    }
+}
+
 // Recebe uma lista de distâncias e um inteiro k
 // Devolve as k menores distâncias da lista
 // Utiliza a função kNearestsRecursive para modificar a lista e devolve apenas os primeiros k elementos da lista modificada
 void kNearests(const FunctionCallbackInfo<Value>& args) {
-    distances.clear();
     Isolate* isolate = args.GetIsolate();
 
-    if (args.Length() < 2) {
+    if (args.Length() < 3) {
         args.GetReturnValue().Set(v8::Array::New(isolate, 0));
         return;
     }
 
-    if (!args[0]->IsArray() || !args[1]->IsNumber()) {
+    if (!args[0]->IsObject() || !args[1]->IsArray() || !args[2]->IsNumber()) {
         args.GetReturnValue().Set(v8::Array::New(isolate, 0));
         return;
     }
 
-    int k = args[1].As<Number>()->Value();
+    int k = args[2].As<Number>()->Value();
 
-    v8::Local<v8::Array> jsArr = v8::Local<v8::Array>::Cast(args[0]);
-    for (unsigned int i = 0; i < jsArr->Length(); i++) {
-        v8::Local<v8::Value> jsElement = jsArr->Get(i);
-        double number = jsElement->NumberValue();
-        distances.push_back(std::make_pair(i, number));
-    }
+    v8::Local<v8::Value> jsElement = args[0];
+    Client client = unpackClient(isolate, jsElement);
+
+    std::vector<Client> clients;
+    unpackClients(isolate, args, clients);
+
+    calculateDistances(client, clients);
 
     int size = distances.size();
-
-    /*std::cout << "size = " << size;
-    std::cout << " -- [";
-    for (int i = 0; i < size-1; i++){
-        std::cout << distances[i].first << ", ";
-    }
-    std::cout << distances[size-1].first << "]" << std::endl;*/
 
     kNearestsRecursive(k, 0, size - 1);
 
@@ -127,8 +179,8 @@ void kNearests(const FunctionCallbackInfo<Value>& args) {
     v8::Local<v8::Array> jsArrReturn = v8::Array::New(isolate, k);
     
     for (int i = 0; i < k; i++){
-        v8::Local<v8::Number> jsElement = v8::Number::New(isolate, distances[i].first);
-        jsArrReturn->Set(i, jsElement);
+        v8::Local<v8::Value> jsElem = v8::Number::New(isolate, distances[i].first);
+        jsArrReturn->Set(i, jsElem);
     }
 
     args.GetReturnValue().Set(jsArrReturn);
