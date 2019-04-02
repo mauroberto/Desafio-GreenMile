@@ -9,7 +9,7 @@ let Attribute = require('../models/attribute');
 module.exports.findNearest = function(req, res){
     let idClient = req.params.code;
     let k = req.params.nResults;
-    let promise = Client.findOne({"_id": idClient}, {"description": false});
+    let promise = Client.findOne({"_id": idClient});
     
     promise.then(
         function(client){

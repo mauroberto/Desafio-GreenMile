@@ -3,10 +3,10 @@
   "version": "0.1.0",
   "description": "",
   "main": "script.js",
-  "apidoc":{
+  "apidoc": {
     "name": "Desafio GreenMile",
     "title": "Desafio GreenMile",
-    "url" : "http://ec2-18-231-176-67.sa-east-1.compute.amazonaws.com:3000/api"
+    "url": "http://ec2-18-231-176-67.sa-east-1.compute.amazonaws.com:3000/api"
   },
   "scripts": {
     "build": "node-gyp configure && node-gyp rebuild",
