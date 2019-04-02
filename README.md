@@ -45,7 +45,7 @@ A complexidade para adicionar um novo atributo a um cliente é `O(logM)`, pois �
 
 O código fonte está em [`app/controllers/clients.js`](https://github.com/mauroberto/Desafio-GreenMile/blob/master/app/controllers/clients.js).
 
-## O que poderia ser melhor
+## O que poderia melhorar
 
 1) A busca 1 poderia ser feita em paralelo. Podemos dividir a lista em partes menores e usar *threads* para executar o algoritmo da busca 1 em cada parte (escolhendo os `k` mais próximos de cada parte). Ao final, bastava aplicar o mesmo algoritmo na lista resultante considerando apenas o `k` elementos devolvidos de cada parte. Como o servidor que estou usando na aws possui apenas um *core*, essa estratégia não ajudaria :(
 
