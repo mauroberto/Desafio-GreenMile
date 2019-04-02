@@ -94,9 +94,11 @@ void calculateDistances(Client& client, std::vector<Client>& listOfClients){
 // A compleixade de tempo é O(N), em que N é o número de elementos no intervalo [begin, end] da lista
 // Modifica a lista e devolve a posição de m na nova lista
 int partition(double m, int begin, int end){
-    if (begin >= end || distances.size() == 0) {
+    if (begin > end || distances.size() == 0) {
         return -1;
     }
+
+    if(begin == end) return begin;
 
     int start = begin - 1;
 
@@ -134,6 +136,8 @@ void kNearestsRecursive(int k, int begin, int end){
         double m = findMedianOfMedians(vec); // Calcula a mediana do vetor
 
         int p = partition(m, begin, end); // Particiona e devolve a posição de m no vetor
+
+        if(p < 0) return;
         
         int smallersEqThanPivot = (p - begin + 1); 
 
