@@ -60,8 +60,6 @@ double findMedianOfMedians(std::vector<double> & vec){
         medians.push_back(m);
     }
 
-    vec.clear();
-
     return findMedianOfMedians(medians);
 }
 
@@ -100,8 +98,6 @@ int partition(double m, int begin, int end){
         return -1;
     }
 
-    if(begin == end) return begin;
-
     int start = begin - 1;
 
     for (int i = begin; i <= end; i++){
@@ -138,15 +134,13 @@ void kNearestsRecursive(int k, int begin, int end){
         double m = findMedianOfMedians(vec); // Calcula a mediana do vetor
 
         int p = partition(m, begin, end); // Particiona e devolve a posição de m no vetor
-
-        if(p < 0) return;
         
         int smallersEqThanPivot = (p - begin + 1); 
 
         if(smallersEqThanPivot == k){
             return;
         }else if(smallersEqThanPivot > k){
-            kNearestsRecursive(k, begin, p - 1); 
+            kNearestsRecursive(k, begin, p); 
         } else {
             kNearestsRecursive(k - smallersEqThanPivot, p + 1, end);
         }
