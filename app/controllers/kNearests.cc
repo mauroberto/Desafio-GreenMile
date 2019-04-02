@@ -56,11 +56,13 @@ double findMedianOfMedians(std::vector<double> & vec){
             countRow++;
         }
 
-        int m = findMedian(row);
+        double m = findMedian(row);
         medians.push_back(m);
     }
 
-    return findMedian(medians);
+    vec.clear();
+
+    return findMedianOfMedians(medians);
 }
 
 // Calcula a distância em km entre duas coordenadas
