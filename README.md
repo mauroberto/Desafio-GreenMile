@@ -39,9 +39,9 @@ A ideia na segunda busca é montar uma árvore binária e balanceada com os atri
 
 Após retornar a lista de clientes com determinado atributo, podemos aplicar o mesmo algoritmo da busca 1 para escolher os `k` mais próximos.
 
-A complexidade esperada dessa busca é `O(logM + N)`, em que `N` é o número de elementos com o atributo recebido. A complexidade de memória é `O(NM)`, que corresponde à memória usada para armazenar a coleção de atributos no banco.
+A complexidade dessa busca é `O(logM + N)`, em que `N` é o número de elementos com o atributo recebido. A complexidade de memória é `O(NM)`, que corresponde à memória usada para armazenar a coleção de atributos no banco.
 
-A complexidade para adicionar um novo atributo a um cliente é `O(logM)`, pois é necessário inserí-lo na lista do atributo. Já a complexidade de remover um atributo é `O(logM + N)`. 
+A complexidade para adicionar um novo atributo a um cliente é `O(logM)`, pois é necessário inserí-lo na lista do atributo. Já a complexidade de remover um atributo é `O(logM + NM)`, que é uma complexidade alta, mas espera-se essa operação seja executada bem menos vezes que a quantidade de buscas.  
 
 O código fonte está em [`app/controllers/clients.js`](https://github.com/mauroberto/Desafio-GreenMile/blob/master/app/controllers/clients.js).
 
@@ -51,4 +51,4 @@ O código fonte está em [`app/controllers/clients.js`](https://github.com/mauro
 
 2) Talvez fosse possível adaptar o algoritmo de Kirkpatrick (1983) [[1]](http://www.ic.unicamp.br/~rezende/ensino/mo619/Voronoi-diagrams-Delaunay-triangulation-Slides.pdf)[[2]](http://cglab.ca/~cdillaba/comp5008/kirkpatrick.html) para esse problema. Nesse algoritmo, é feito um pré-processamento dos pontos em `O(NlogN)` (usando `O(N)` de memória) e ele permite fazer *queries* do ponto mais próximo em `O(logN)`.
 
-3) O mongodb já implementa um algoritmo interno para calcular os pontos mais próximos, usá-lo possívelmente irá melhorar o desempenho, já que o banco não precisará retornar todos os dados para a aplicação. 
+3) O `mongodb` já implementa um algoritmo interno para calcular os pontos mais próximos, usá-lo possívelmente irá melhorar o desempenho, já que o banco não precisará retornar todos os dados para a aplicação. 
