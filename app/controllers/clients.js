@@ -20,16 +20,15 @@ module.exports.findNearest = function(req, res){
             promise2.then(
                 function(clients){
 
-                    var nearests;
+                    var nearests, nearestsClients;
                     if( k < clients.length ){
                         nearests = AddonKNearests.kNearests(client, clients, k);
+                        nearestsClients = [].map.call(nearests, function(i) {
+                            return clients[i];
+                        });
                     }else{
-                        nearests = clients;
+                        nearestsClients = clients;
                     }
-
-                    var nearestsClients = [].map.call(nearests, function(i) {
-                        return clients[i];
-                    });
 
                     res.json(nearestsClients);
                 }
@@ -75,16 +74,15 @@ module.exports.findNearestWithAttribute = function(req, res){
                     }
                     
                     
-                    var nearests;
+                    var nearests, nearestsClients;
                     if( k < clients.length ){
                         nearests = AddonKNearests.kNearests(client, clients, k);
+                        nearestsClients = [].map.call(nearests, function(i) {
+                            return clients[i];
+                        });
                     }else{
-                        nearests = clients;
+                        nearestsClients = clients;
                     }
-
-                    var nearestsClients = [].map.call(nearests, function(i) {
-                        return clients[i];
-                    });
 
                     res.json(nearestsClients);
                 }
