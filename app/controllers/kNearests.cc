@@ -199,7 +199,9 @@ void kNearests(const FunctionCallbackInfo<Value>& args) {
 
     int size = distances.size();
 
-    kNearestsRecursive(k, 0, size - 1);
+    if ( k <= size ){
+        kNearestsRecursive(k, 0, size - 1);
+    }
 
     k = k < size ? k : size;
 
